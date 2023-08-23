@@ -1,0 +1,86 @@
+CREATE DATABASE centro_cirurgico;
+
+USE centro_cirurgico;
+
+CREATE TABLE tbl_especialidade(
+	cod_especialidade INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome_especialidade VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE tbl_paciente(
+	cod_paciente INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome_paciente VARCHAR(500) NOT NULL,
+    telefone_paciente VARCHAR(10) NOT NULL,
+    celular_paciente VARCHAR(11) NOT NULL,
+    email_paciente VARCHAR(100) NOT NULL,
+    nome_responsavel VARCHAR(500) NOT NULL,
+    telefone_responsavel VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE tbl_medico(
+	cod_medico INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    cod_especialidade INT(10) UNSIGNED NOT NULL,
+    nome_medico VARCHAR(500) NOT NULL,
+    email_medico VARCHAR(100) NOT NULL,
+    telefone_medico VARCHAR(10) NOT NULL,
+    celular_medico VARCHAR(11) NOT NULL
+);
+
+CREATE TABLE tbl_insumos(
+	cod_insumo INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    cod_paciente INT(10) UNSIGNED NOT NULL,
+    nome_insumo VARCHAR(500) NOT NULL,
+    quantidade_insumo DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE tbl_medico(
+	cod_medico INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    cod_especialidade INT(10) UNSIGNED NOT NULL,
+    nome_medico VARCHAR(500) NOT NULL,
+    email_medico VARCHAR(100) NOT NULL,
+    telefone_medico VARCHAR(10) NOT NULL,
+    celular_medico VARCHAR(11) NOT NULL
+);
+
+CREATE TABLE tbl_sala(
+	cod_sala INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    cod_especialidade INT(10) UNSIGNED NOT NULL,
+    numero_sala VARCHAR(500) NOT NULL
+);
+
+CREATE TABLE tbl_agenda(
+	cod_agenda INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    cod_sala INT(10) UNSIGNED NOT NULL,
+    cod_medico INT(10) UNSIGNED NOT NULL,
+    cod_paciente INT(10) UNSIGNED NOT NULL,
+    data_cirurgia VARCHAR(10) NOT NULL,
+    status_cirurgia enum("Agendada", "Concluída", "Cancelada")
+);
+
+-- Comandos de alter --
+ALTER TABLE tbl_sala ADD CONSTRAINT fk_tbl_sala_tbl_especialidade 
+FOREIGN KEY (cod_especialidade)
+REFERENCES tbl_especialidade(cod_especialidade);
+
+ALTER TABLE tbl_insumos ADD CONSTRAINT fk_tbl_insumos_tbl_paciente 
+FOREIGN KEY (cod_paciente)
+REFERENCES tbl_paciente(cod_paciente);
+
+ALTER TABLE tbl_medico ADD CONSTRAINT fk_tbl_medico_tbl_especialidade 
+FOREIGN KEY (cod_especialidade)
+REFERENCES tbl_especialidade(cod_especialidade);
+
+
+
+-- Relacionamentos da tabela agenda --
+ALTER TABLE tbl_agenda ADD CONSTRAINT fk_tbl_agenda_tbl_sala 
+FOREIGN KEY (cod_sala)
+REFERENCES tbl_sala(cod_sala);
+
+ALTER TABLE tbl_agenda ADD CONSTRAINT fk_tbl_agenda_tbl_medico 
+FOREIGN KEY (cod_medico)
+REFERENCES tbl_medico(cod_medico);
+
+ALTER TABLE tbl_agenda ADD CONSTRAINT fk_tbl_agenda_tbl_paciente
+FOREIGN KEY (cod_paciente)
+REFERENCES tbl_paciente(cod_paciente);
